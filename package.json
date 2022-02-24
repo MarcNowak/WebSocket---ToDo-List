@@ -1,0 +1,17 @@
+{
+  "name": "websocket-todo-list",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "marcin-nowak",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "start": "npx nodemon server.js"
+  },
+  "dependencies": {
+    "express": "4.17.3",
+    "socket.io": "2.2.0"
+  }
+}
