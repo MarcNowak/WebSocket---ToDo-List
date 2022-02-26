@@ -10,10 +10,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.socket = io('localhost:8000', { transports: ["websocket"] });
-    this.socket.on('updateData', data => this.updateTasks(data));
-    this.socket.on('removeTask', id => this.removeTask(id));
-    this.socket.on('addTask', task => this.addTask(task));
+    this.socket = io("localhost:8000", { transports: ["websocket"] });
+    this.socket.on("updateData", (data) => this.updateTasks(data));
+    this.socket.on("removeTask", (id) => this.removeTask(id));
+    this.socket.on("addTask", (task) => this.addTask(task));
   };
 
   updateTasks = newTasks => {
@@ -22,7 +22,7 @@ class App extends React.Component {
 
   removeTask = (id, local = false) => {
     this.setState({
-      tasks: this.state.tasks.filter(task => task.id !== id),
+      tasks: this.state.tasks.filter((task) => task.id !== id),
     });
     if(local) {
       this.socket.emit('removeTask', id);

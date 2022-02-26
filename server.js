@@ -1,12 +1,9 @@
 const express = require('express');
-const path = require('path');
 const app = express();
 const socket = require('socket.io');
 const server = app.listen(process.env.PORT || 8000, () => {
   console.log('Server is running');
 });
-
-const io = socket(server);
 
 const tasks = [];
 
@@ -14,10 +11,26 @@ app.get('*', (req, res) => {
   res.send('Not found...');
 });
 
+const io = socket(server);
 io.on('connection', (socket) => {
-  console.log('a user is connected');
-});
+  console.log('a user connected ');
+  socket.emit('updateData', tasks);
+  socket.on('addTask', (task) => {
+    console.log(`User ${socket.id} adds ${task.name} taskId: ${task.id}`);
+    tasks.push(task);
+    socket.broadcast.emit('addTask', task);
+  });
 
-app.use((req, res) => {
-  res.status(404).send({ message: 'error 404: not found...' })
+  socket.on('removeTask', (id) => {
+    console.log(`User ${socket.id} removes task ${id}`);
+    tasks.splice(
+      tasks.findIndex((task) => task.id === id),
+      1
+    );
+    socket.broadcast.emit('removeTask', id);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Socket ' + socket.id +' left');
+  });
 });
